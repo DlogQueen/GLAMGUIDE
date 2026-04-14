@@ -2,32 +2,264 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 346.8 77.2% 49.8%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 346.8 77.2% 49.8%;
+    --radius: 0.75rem;
+    
+    /* Glam Guide AI Premium Palette */
+    --glam-50: #fdf2f8;
+    --glam-100: #fce7f3;
+    --glam-200: #fbcfe8;
+    --glam-300: #f9a8d4;
+    --glam-400: #f472b6;
+    --glam-500: #ec4899;
+    --glam-600: #db2777;
+    --glam-700: #be185d;
+    --fuchsia-400: #e879f9;
+    --fuchsia-500: #d946ef;
+    --fuchsia-600: #c026d3;
+    --royal-500: #8b5cf6;
+    --royal-600: #7c3aed;
+    --royal-700: #6d28d9;
+    --luxury-gold: #d4af37;
+    --luxury-rose: #b76e79;
+    --gold-500: #facc15;
+    
+    /* Glass effect */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  }
+
+  /* Standard Dark Mode */
+  .dark {
+    --background: 20 14.3% 4.1%;
+    --foreground: 0 0% 95%;
+    --card: 24 9.8% 10%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 346.8 77.2% 49.8%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 12 6.5% 15.1%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 346.8 77.2% 49.8%;
+    
+    --glass-bg: rgba(20, 20, 20, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Deep Purple Dark Mode */
+  .dark-purple {
+    --background: 260 60% 8%;
+    --foreground: 0 0% 95%;
+    --card: 260 50% 12%;
+    --card-foreground: 0 0% 95%;
+    --popover: 260 55% 10%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 270 80% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 260 40% 20%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 260 30% 15%;
+    --muted-foreground: 260 20% 70%;
+    --accent: 280 70% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 260 30% 20%;
+    --input: 260 30% 20%;
+    --ring: 270 80% 60%;
+    
+    --glass-bg: rgba(30, 15, 50, 0.8);
+    --glass-border: rgba(150, 100, 255, 0.2);
+    --glass-shadow: 0 8px 32px 0 rgba(100, 50, 200, 0.4);
+    
+    /* Deep Purple Palette */
+    --glam-50: #1a0a2e;
+    --glam-100: #2d1b4e;
+    --glam-200: #4a2c7a;
+    --glam-300: #6b3d9f;
+    --glam-400: #8b4fc7;
+    --glam-500: #a855f7;
+    --glam-600: #c084fc;
+    --glam-700: #d8b4fe;
+    --fuchsia-400: #d946ef;
+    --fuchsia-500: #c026d3;
+    --fuchsia-600: #a21caf;
+    --royal-500: #7c3aed;
+    --royal-600: #6d28d9;
+    --royal-700: #5b21b6;
+  }
+  
+  /* Deep Pink Dark Mode */
+  .dark-pink {
+    --background: 330 60% 8%;
+    --foreground: 0 0% 95%;
+    --card: 330 50% 12%;
+    --card-foreground: 0 0% 95%;
+    --popover: 330 55% 10%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 340 80% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 330 40% 20%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 330 30% 15%;
+    --muted-foreground: 330 20% 70%;
+    --accent: 350 70% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 330 30% 20%;
+    --input: 330 30% 20%;
+    --ring: 340 80% 60%;
+    
+    --glass-bg: rgba(40, 10, 30, 0.8);
+    --glass-border: rgba(255, 100, 150, 0.2);
+    --glass-shadow: 0 8px 32px 0 rgba(200, 50, 100, 0.4);
+    
+    /* Deep Pink Palette */
+    --glam-50: #2a0a1a;
+    --glam-100: #4a1a2e;
+    --glam-200: #7a1e4a;
+    --glam-300: #9f2d5e;
+    --glam-400: #c73d7a;
+    --glam-500: #ec4899;
+    --glam-600: #f472b6;
+    --glam-700: #fbcfe8;
+    --fuchsia-400: #e879f9;
+    --fuchsia-500: #d946ef;
+    --fuchsia-600: #c026d3;
+    --royal-500: #8b5cf6;
+    --royal-600: #7c3aed;
+    --royal-700: #6d28d9;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  
+  /* Glass morphism */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+  
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Premium gradients */
+  .gradient-rose-gold {
+    background: linear-gradient(135deg, var(--rose-100) 0%, var(--rose-200) 25%, var(--gold-200) 75%, var(--gold-100) 100%);
+  }
+  
+  .gradient-text-rose {
+    background: linear-gradient(135deg, var(--rose-600) 0%, var(--rose-400) 50%, var(--gold-400) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .gradient-border {
+    position: relative;
+  }
+  
+  .gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--rose-400), var(--gold-400), var(--rose-300));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  
+  /* Shimmer effect */
+  .shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+  
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--rose-300);
+    border-radius: 3px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--rose-400);
+  }
+  
+  /* Glow effects */
+  .glow-rose {
+    box-shadow: 0 0 20px rgba(244, 63, 94, 0.3), 0 0 40px rgba(244, 63, 94, 0.1);
+  }
+  
+  .glow-gold {
+    box-shadow: 0 0 20px rgba(250, 204, 21, 0.3), 0 0 40px rgba(250, 204, 21, 0.1);
   }
 }
