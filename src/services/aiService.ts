@@ -1,11 +1,11 @@
 import { AIMakeupAnalysis, MakeupStyle, MakeupStep } from '@/types';
 
 // API configuration
-const GROQ_API_KEY = 'REMOVED_SECRET';
+const GROQ_API_KEY = process.env.GROQ_API_KEY || '';
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 // OpenRouter fallback configuration
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 // Fallback AI logic for when no API key is available
