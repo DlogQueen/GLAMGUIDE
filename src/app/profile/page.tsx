@@ -134,7 +134,7 @@ export default function ProfilePage() {
         <div className="absolute inset-0 flex items-center justify-center">
           {profile.headerStyle === 'quote' && profile.headerContent?.quote && (
             <p className="text-xl sm:text-2xl font-serif italic text-white/80 text-center px-4">
-              "{profile.headerContent.quote}"
+              &ldquo;{profile.headerContent.quote}&rdquo;
             </p>
           )}
           {profile.headerStyle === 'achievement' && profile.headerContent?.achievement && (

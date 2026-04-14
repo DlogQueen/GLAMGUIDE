@@ -109,12 +109,12 @@ export function GenderExpressionSelector({
           <Palette className="w-8 h-8 text-fuchsia-400" />
         </motion.div>
         <h2 className="text-3xl font-bold text-white mb-2">
-          What's Your Vibe?
+          What&apos;s Your Vibe?
         </h2>
         <p className="text-white/60 max-w-md mx-auto">
           Pick a color that feels like you. No labels, no boxes - just express yourself.
           <span className="block mt-2 text-sm text-fuchsia-400">
-            (Trans women ARE women. Cis women ARE women. We're all just people doing makeup 💖)
+            (Trans women ARE women. Cis women ARE women. We&apos;re all just people doing makeup 💖)
           </span>
         </p>
       </div>
