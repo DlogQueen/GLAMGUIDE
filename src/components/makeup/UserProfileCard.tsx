@@ -69,10 +69,10 @@ const THEMES = [
 
 // Sample makeup look images for overlay
 const LOOK_IMAGES = [
-  "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=200&h=200&fit=crop",
-  "https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=200&h=200&fit=crop",
-  "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=200&h=200&fit=crop",
-  "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=200&h=200&fit=crop"
+  "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=200&h=200&fit=crop&auto=format",
+  "https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=200&h=200&fit=crop&auto=format",
+  "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=200&h=200&fit=crop&auto=format",
+  "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=200&h=200&fit=crop&auto=format"
 ];
 
 export function UserProfileCard({ 
@@ -100,16 +100,22 @@ export function UserProfileCard({
               src={LOOK_IMAGES[0]} 
               alt="" 
               className="absolute top-4 left-4 w-20 h-20 rounded-2xl object-cover opacity-60 rotate-[-8deg] shadow-lg"
+              loading="lazy"
+              decoding="async"
             />
             <img 
               src={LOOK_IMAGES[1]} 
               alt="" 
               className="absolute top-8 right-8 w-24 h-24 rounded-2xl object-cover opacity-50 rotate-[12deg] shadow-lg"
+              loading="lazy"
+              decoding="async"
             />
             <img 
               src={LOOK_IMAGES[2]} 
               alt="" 
               className="absolute bottom-4 left-1/3 w-16 h-16 rounded-2xl object-cover opacity-40 rotate-[5deg] shadow-lg"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           
@@ -149,6 +155,8 @@ export function UserProfileCard({
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 0.6, x: 0 }}
             className="absolute top-6 left-6 w-24 h-24 rounded-2xl object-cover rotate-[-8deg] shadow-xl border-2 border-white/30"
+            loading="lazy"
+            decoding="async"
           />
           <motion.img 
             src={LOOK_IMAGES[1]} 
@@ -157,6 +165,8 @@ export function UserProfileCard({
             animate={{ opacity: 0.5, x: 0 }}
             transition={{ delay: 0.1 }}
             className="absolute top-10 right-10 w-28 h-28 rounded-2xl object-cover rotate-[12deg] shadow-xl border-2 border-white/30"
+            loading="lazy"
+            decoding="async"
           />
           <motion.img 
             src={LOOK_IMAGES[2]} 
@@ -165,6 +175,8 @@ export function UserProfileCard({
             animate={{ opacity: 0.4, y: 0 }}
             transition={{ delay: 0.2 }}
             className="absolute bottom-8 left-1/4 w-20 h-20 rounded-2xl object-cover rotate-[5deg] shadow-xl border-2 border-white/30"
+            loading="lazy"
+            decoding="async"
           />
           <motion.img 
             src={LOOK_IMAGES[3]} 
@@ -173,6 +185,8 @@ export function UserProfileCard({
             animate={{ opacity: 0.45, y: 0 }}
             transition={{ delay: 0.15 }}
             className="absolute bottom-4 right-1/4 w-22 h-22 rounded-2xl object-cover rotate-[-5deg] shadow-xl border-2 border-white/30"
+            loading="lazy"
+            decoding="async"
           />
         </div>
         

@@ -37,6 +37,8 @@ import { useEffect } from "react";
 export default function Home() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "signup">("signup");
+  const [authError, setAuthError] = useState("");
+  const [isAuthLoading, setIsAuthLoading] = useState(false);
   const { isAuthenticated, signIn, signUp } = useAuth();
 
   // If authenticated, redirect to dashboard
@@ -47,12 +49,50 @@ export default function Home() {
   // Otherwise show landing page
   const openSignUp = () => {
     setAuthMode("signup");
+    setAuthError("");
     setShowAuthModal(true);
   };
 
   const openSignIn = () => {
     setAuthMode("login");
+    setAuthError("");
     setShowAuthModal(true);
+  };
+
+  const handleAuthSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setAuthError("");
+    setIsAuthLoading(true);
+
+    try {
+      const form = e.target as HTMLFormElement;
+      const email = (form.elements.namedItem('email') as HTMLInputElement)?.value || '';
+      const password = (form.elements.namedItem('password') as HTMLInputElement)?.value || '';
+      const nameEl = form.elements.namedItem('name') as HTMLInputElement | null;
+      const name = nameEl?.value || '';
+
+      if (!email) throw new Error("Email is required");
+      if (!password) throw new Error("Password is required");
+      if (authMode === "signup" && !name) throw new Error("Name is required");
+
+      if (authMode === "login") {
+        const { error } = await signIn(email, password);
+        if (error) throw error;
+      } else {
+        const { error } = await signUp(email, password, name);
+        if (error) throw error;
+      }
+      
+      // Auth successful - modal will auto-close via auth state change
+      setShowAuthModal(false);
+      form.reset();
+    } catch (err: any) {
+      const message = err?.message || "Authentication failed";
+      console.error("Auth error:", message);
+      setAuthError(message);
+    } finally {
+      setIsAuthLoading(false);
+    }
   };
 
   return (
@@ -92,6 +132,8 @@ export default function Home() {
                 src="/images/logo.png" 
                 alt="Glam Guide AI" 
                 className="h-20 w-auto hover:scale-105 transition-transform"
+                fetchPriority="high"
+                loading="eager"
                 onError={(e) => {
                   // Fallback if logo doesn't load
                   const target = e.target as HTMLImageElement;
@@ -371,14 +413,26 @@ export default function Home() {
                 transition={{ duration: 3, repeat: Infinity }}
                 className="absolute -top-4 -right-4 w-20 h-20 rounded-2xl overflow-hidden shadow-xl rotate-12"
               >
-                <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=200&h=200&fit=crop" alt="Look" className="w-full h-full object-cover" />
+                <img 
+                  src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=200&h=200&fit=crop&auto=format" 
+                  alt="Look" 
+                  className="w-full h-full object-cover"
+                  fetchPriority="high"
+                  loading="eager"
+                />
               </motion.div>
               <motion.div 
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 4, repeat: Infinity }}
                 className="absolute -bottom-4 -left-4 w-16 h-16 rounded-2xl overflow-hidden shadow-xl -rotate-12"
               >
-                <img src="https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=200&h=200&fit=crop" alt="Look" className="w-full h-full object-cover" />
+                <img 
+                  src="https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=200&h=200&fit=crop&auto=format" 
+                  alt="Look" 
+                  className="w-full h-full object-cover"
+                  fetchPriority="high"
+                  loading="eager"
+                />
               </motion.div>
             </motion.div>
           </div>
@@ -603,27 +657,7 @@ export default function Home() {
 
                 {/* Form */}
                 <form 
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    const form = e.target as HTMLFormElement;
-                    const email = (form.elements.namedItem('email') as HTMLInputElement).value;
-                    const password = (form.elements.namedItem('password') as HTMLInputElement).value;
-                    const nameEl = form.elements.namedItem('name') as HTMLInputElement | null;
-                    const name = nameEl?.value || '';
-                    
-                    try {
-                      if (authMode === "login") {
-                        const { error } = await signIn(email, password);
-                        if (error) throw error;
-                      } else {
-                        const { error } = await signUp(email, password, name);
-                        if (error) throw error;
-                      }
-                      setShowAuthModal(false);
-                    } catch (err: any) {
-                      alert(err.message || "Authentication failed");
-                    }
-                  }} 
+                  onSubmit={handleAuthSubmit}
                   className="p-8 space-y-4"
                 >
                   {authMode === "signup" && (
@@ -634,9 +668,10 @@ export default function Home() {
                         <input
                           name="name"
                           type="text"
-                          className="w-full rounded-lg border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-sm text-white placeholder-white/30 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20"
+                          className="w-full rounded-lg border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-sm text-white placeholder-white/30 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 disabled:opacity-50"
                           placeholder="What should we call you?"
                           required
+                          disabled={isAuthLoading}
                         />
                       </div>
                     </div>
@@ -649,9 +684,10 @@ export default function Home() {
                       <input
                         name="email"
                         type="email"
-                        className="w-full rounded-lg border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-sm text-white placeholder-white/30 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20"
+                        className="w-full rounded-lg border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-sm text-white placeholder-white/30 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 disabled:opacity-50"
                         placeholder="you@example.com"
                         required
+                        disabled={isAuthLoading}
                       />
                     </div>
                   </div>
@@ -663,20 +699,42 @@ export default function Home() {
                       <input
                         name="password"
                         type="password"
-                        className="w-full rounded-lg border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-sm text-white placeholder-white/30 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20"
+                        className="w-full rounded-lg border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-sm text-white placeholder-white/30 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 disabled:opacity-50"
                         placeholder="Min 6 characters"
                         required
                         minLength={6}
+                        disabled={isAuthLoading}
                       />
                     </div>
                   </div>
 
+                  {/* Error Display */}
+                  {authError && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="rounded-lg bg-red-500/10 border border-red-500/30 p-3 text-sm text-red-400"
+                    >
+                      {authError}
+                    </motion.div>
+                  )}
+
                   <Button
                     type="submit"
-                    className="w-full gap-2 bg-gradient-to-r from-purple-500 via-pink-500 to-fuchsia-500 hover:shadow-[0_0_40px_rgba(236,72,153,0.4)] text-white font-bold py-6 text-base border-0"
+                    disabled={isAuthLoading}
+                    className="w-full gap-2 bg-gradient-to-r from-purple-500 via-pink-500 to-fuchsia-500 hover:shadow-[0_0_40px_rgba(236,72,153,0.4)] text-white font-bold py-6 text-base border-0 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    <Sparkles className="h-5 w-5" />
-                    {authMode === "login" ? "Sign In" : "Get Started Free"}
+                    {isAuthLoading ? (
+                      <>
+                        <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="h-5 w-5" />
+                        {authMode === "login" ? "Sign In" : "Get Started Free"}
+                      </>
+                    )}
                   </Button>
 
                   {/* Toggle */}
@@ -684,14 +742,30 @@ export default function Home() {
                     {authMode === "login" ? (
                       <>
                         Don&apos;t have an account?{" "}
-                        <button type="button" onClick={() => setAuthMode("signup")} className="text-pink-400 hover:text-pink-300 font-medium">
+                        <button 
+                          type="button" 
+                          onClick={() => {
+                            setAuthMode("signup");
+                            setAuthError("");
+                          }} 
+                          className="text-pink-400 hover:text-pink-300 font-medium disabled:opacity-50"
+                          disabled={isAuthLoading}
+                        >
                           Create one
                         </button>
                       </>
                     ) : (
                       <>
                         Already have an account?{" "}
-                        <button type="button" onClick={() => setAuthMode("login")} className="text-pink-400 hover:text-pink-300 font-medium">
+                        <button 
+                          type="button" 
+                          onClick={() => {
+                            setAuthMode("login");
+                            setAuthError("");
+                          }} 
+                          className="text-pink-400 hover:text-pink-300 font-medium disabled:opacity-50"
+                          disabled={isAuthLoading}
+                        >
                           Sign in
                         </button>
                       </>

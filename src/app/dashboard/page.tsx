@@ -1,7 +1,3 @@
-"use client";
-
-import React from "react";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { 
   Sparkles, 
@@ -29,7 +25,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserProfileCard } from "@/components/makeup/UserProfileCard";
-import { BottomNav } from "@/components/nav/BottomNav";
 
 const QUICK_ACTIONS = [
   {
@@ -143,56 +138,10 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-[#0a0a0f] text-white pb-20 overflow-x-hidden selection:bg-pink-500/30">
-      {/* Background Effects */}
-      <div className="fixed inset-0 -z-10 pointer-events-none">
+      {/* Subtle background */}
+      <div className="fixed inset-0 -z-10 pointer-events-none particle-grid">
         <div className="absolute inset-0 bg-[#0a0a0f]" />
-        {/* AR face grid pattern */}
-        <div className="absolute inset-0 opacity-[0.02]" style={{
-          backgroundImage: `linear-gradient(rgba(236, 72, 153, 0.3) 1px, transparent 1px),
-                           linear-gradient(90deg, rgba(236, 72, 153, 0.3) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px'
-        }} />
-        {/* Hot pink glows */}
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-pink-600/10 rounded-full blur-[150px] animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-fuchsia-600/10 rounded-full blur-[150px] animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-rose-600/10 rounded-full blur-[200px]" />
-        {/* Glowing sparks */}
-        <div className="absolute top-20 left-20 w-1 h-1 bg-pink-400 rounded-full animate-ping" />
-        <div className="absolute top-40 right-40 w-1.5 h-1.5 bg-fuchsia-400 rounded-full animate-ping delay-300" />
-        <div className="absolute bottom-40 left-40 w-1 h-1 bg-rose-400 rounded-full animate-ping delay-700" />
       </div>
-
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center gap-3">
-              <img 
-                src="/images/logo.png" 
-                alt="Glam Guide AI" 
-                className="h-10 w-auto hover:scale-105 transition-transform"
-              />
-            </Link>
-            
-            <div className="flex items-center gap-2">
-              <Link href="/profile">
-                <Button variant="ghost" size="sm" className="text-white/70 hover:text-white hover:bg-white/5">
-                  <User className="w-4 h-4 mr-2" />
-                  Profile
-                </Button>
-              </Link>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={signOut}
-                className="text-white/50 hover:text-red-400 hover:bg-red-500/10"
-              >
-                <LogOut className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
         {/* Welcome Banner */}
@@ -217,14 +166,16 @@ export default function DashboardPage() {
           </div>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-12 gap-8"> 
           {/* Left Column - Profile Card & Stats */}
-          <div className="lg:col-span-1 space-y-6">
+          {/* Sidebar */}
+          <div className="lg:col-span-4 space-y-6"> 
             <UserProfileCard 
               profile={profile}
               unlockedAchievements={unlockedAchievements}
               nextAchievements={nextAchievements}
-            />
+              className="shadow-transcend"
+            /> 
 
             {/* Streak Card - Hot Pink Style */}
             <Card className="p-6 bg-gradient-to-br from-pink-500/20 via-rose-500/20 to-fuchsia-500/20 border-pink-500/30 relative overflow-hidden">
@@ -404,8 +355,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-
-      <BottomNav />
     </main>
   );
 }

@@ -190,6 +190,23 @@
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
   }
+
+  /* TranscendX shadows */
+  .shadow-transcend {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 
+                0 0 0 1px rgba(255, 255, 255, 0.05), 
+                0 10px 20px -5px rgba(139, 92, 246, 0.1);
+  }
+
+  /* Subtle glows */
+  .glow-subtle {
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.15);
+  }
+
+  /* Reduced particle grid */
+  .particle-grid {
+    opacity: 0.01;
+  }
   
   .glass-dark {
     background: rgba(0, 0, 0, 0.4);
