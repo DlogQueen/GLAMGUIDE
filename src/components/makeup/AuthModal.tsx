@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail, Lock, User, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,16 +11,38 @@ import { useAuth } from "@/contexts/AuthContext";
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
+  redirectTo?: string;
 }
 
-export function AuthModal({ isOpen, onClose }: AuthModalProps) {
+export function AuthModal({ isOpen, onClose, redirectTo = "/dashboard" }: AuthModalProps) {
+  const router = useRouter();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { signIn, signUp } = useAuth();
+  const [success, setSuccess] = useState(false);
+  const { signIn, signUp, isAuthenticated } = useAuth();
+
+  // Auto-close and redirect after successful auth
+  useEffect(() => {
+    if (isAuthenticated && isOpen && success) {
+      const timer = setTimeout(() => {
+        onClose();
+        router.push(redirectTo);
+        setTimeout(() => {
+          setMode("login");
+          setEmail("");
+          setPassword("");
+          setName("");
+          setError("");
+          setSuccess(false);
+        }, 300);
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [isAuthenticated, isOpen, success, onClose, redirectTo, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +57,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         const { error } = await signUp(email, password, name);
         if (error) throw error;
       }
-      onClose();
+      setSuccess(true);
     } catch (err: any) {
       setError(err.message || "Authentication failed");
     } finally {
@@ -83,7 +106,24 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 </p>
               </div>
 
+              {/* Success State */}
+              {success && (
+                <div className="p-8 text-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", duration: 0.5 }}
+                  >
+                    <Sparkles className="h-12 w-12 mx-auto text-pink-500 mb-4" />
+                  </motion.div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Welcome, Gorgeous!</h3>
+                  <p className="text-sm text-gray-500">Redirecting you now...</p>
+                  <div className="mt-4 h-1 w-24 mx-auto bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 rounded-full animate-pulse" />
+                </div>
+              )}
+
               {/* Form */}
+              {!success && (
               <form onSubmit={handleSubmit} className="p-6 space-y-4">
                 {mode === "signup" && (
                   <div>
@@ -187,6 +227,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   )}
                 </div>
               </form>
+              )}
             </Card>
           </motion.div>
         </motion.div>

@@ -32,7 +32,7 @@ const DEFAULT_SETTINGS: VoiceSettings = {
 
 export async function generateSpeech(
   text: string,
-  voiceId: string = VOICE_OPTIONS.BELLA,
+  voiceId: string = VOICE_OPTIONS.ELLI,
   settings: VoiceSettings = DEFAULT_SETTINGS
 ): Promise<string | null> {
   if (!ELEVENLABS_API_KEY) {
@@ -108,8 +108,8 @@ export function speakWithBrowserTTS(
     utterance.voice = femaleVoice;
   }
   
-  utterance.rate = 0.85;
-  utterance.pitch = 1.15;
+  utterance.rate = 0.92;
+  utterance.pitch = 1.25;
   utterance.volume = 1.0;
   
   if (onEnd) {

@@ -445,21 +445,41 @@ function generateLocalMakeupStyle(description: string): MakeupStyle {
   };
 }
 
-// Main function with cascade fallback
+// Main function with secure API route
 export async function generateCustomMakeupStyle(prompt: string): Promise<MakeupStyle | null> {
   try {
-    // Try Groq first
-    return await generateWithGroq(prompt);
-  } catch (groqError) {
-    console.warn('Groq API failed, trying OpenRouter...', groqError);
-    try {
-      // Fallback to OpenRouter
-      return await generateWithOpenRouter(prompt);
-    } catch (openRouterError) {
-      console.warn('OpenRouter failed, using local AI...', openRouterError);
-      // Final fallback to local logic
-      return generateLocalMakeupStyle(prompt);
+    // Use secure API route
+    const response = await fetch('/api/ai/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ description: prompt }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
     }
+
+    const data = await response.json();
+    const result = data.result;
+
+    // Convert API response to MakeupStyle format
+    return {
+      id: `custom-${Date.now()}`,
+      name: result.name || prompt.charAt(0).toUpperCase() + prompt.slice(1),
+      description: result.description || `A ${result.difficulty}-level makeup look`,
+      difficulty: result.difficulty || 'beginner',
+      duration: `${result.duration || 20} min`,
+      tags: result.tags || [prompt.toLowerCase()],
+      imageUrl: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=600&h=800&fit=crop',
+      accentColor: result.baseColors?.[0] || 'pink',
+      steps: generateSteps(result.tags || [], result.difficulty || 'beginner')
+    };
+  } catch (error) {
+    console.warn('API failed, using local AI fallback:', error);
+    // Final fallback to local logic
+    return generateLocalMakeupStyle(prompt);
   }
 }
 

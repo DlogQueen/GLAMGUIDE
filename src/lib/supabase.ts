@@ -9,38 +9,3 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     persistSession: true,
   },
 });
-
-// Database types
-export interface Profile {
-  id: string;
-  user_id: string;
-  name: string;
-  total_looks_created: number;
-  total_tutorials_completed: number;
-  total_time_spent: number;
-  favorite_styles: string[];
-  streak_days: number;
-  last_active_date: string;
-  achievements: UserAchievement[];
-  facial_features?: FacialFeatures;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface UserAchievement {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  unlocked: boolean;
-  unlocked_at?: string;
-  progress: number;
-  requirement: number;
-}
-
-export interface FacialFeatures {
-  faceShape: string;
-  eyeShape: string;
-  skinTone: string;
-  undertone: string;
-}

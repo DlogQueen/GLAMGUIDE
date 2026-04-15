@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -37,10 +38,13 @@ import {
 import { generateCoachingTip } from "@/services/aiService";
 import { speakWithPremiumVoice, VOICE_OPTIONS } from "@/services/voiceService";
 import { StepOverlay, StepProgressDots } from "@/components/makeup/StepOverlay";
+import { useAuth } from "@/contexts/AuthContext";
+import { betaLocal } from "@/services/betaLocal";
 
 function TutorialContent() {
   const searchParams = useSearchParams();
   const styleId = searchParams.get("style");
+  const { completeTutorial } = useAuth();
   
   const [style, setStyle] = useState<MakeupStyle | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
@@ -177,6 +181,12 @@ function TutorialContent() {
       setCoachingMessage("Great job! Moving to next step... 💄");
     } else {
       setCoachingMessage("🎉 Tutorial complete! You look fabulous!");
+      betaLocal.addTutorialHistory({
+        styleId: style.id,
+        styleName: style.name,
+        completedAt: new Date().toISOString(),
+      });
+      completeTutorial(style.id);
     }
   };
 
@@ -211,6 +221,14 @@ function TutorialContent() {
       <header className="sticky top-0 z-50 border-b border-rose-100 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
+            <Link href="/">
+              <img 
+                src="/images/logo.png" 
+                alt="Glam Guide AI" 
+                className="h-8 w-auto hover:scale-105 transition-transform"
+              />
+            </Link>
+            <div className="h-6 w-px bg-gray-200" />
             <Button variant="ghost" size="icon" onClick={() => window.history.back()}>
               <ChevronLeft className="h-5 w-5" />
             </Button>

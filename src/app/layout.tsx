@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { TessiChat } from "@/components/makeup/TessiChat";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -37,8 +38,8 @@ export const metadata: Metadata = {
     title: "Glam Guide AI",
   },
   icons: {
-    icon: "/images/Logo.png",
-    apple: "/images/Logo.png",
+    icon: "/images/logo.png",
+    apple: "/images/logo.png",
   },
 };
 
@@ -50,7 +51,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
       <body className="font-sans antialiased">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          {children}
+          <TessiChat />
+        </AuthProvider>
       </body>
     </html>
   );
