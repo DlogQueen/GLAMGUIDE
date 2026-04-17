@@ -61,7 +61,7 @@ NEXT_PUBLIC_DEEPAR_LICENSE_KEY=your_license_key_here
 ### 4. Groq (Fast AI Responses)
 ```bash
 # Get from: https://console.groq.com/keys
-GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxx
+GROQ_API_KEY=your_groq_key_here
 ```
 **Where to find:**
 1. Go to [Groq Console](https://console.groq.com)
