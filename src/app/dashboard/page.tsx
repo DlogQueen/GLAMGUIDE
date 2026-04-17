@@ -1,14 +1,18 @@
+"use client";
+
+import React from "react";
+
 import Link from "next/link";
-import { 
-  Sparkles, 
-  User, 
-  Camera, 
-  MessageCircle, 
+import { motion } from "framer-motion";
+import {
+  Sparkles,
+  User,
+  Camera,
+  MessageCircle,
   Award,
   Heart,
   TrendingUp,
   Settings,
-  LogOut,
   ChevronRight,
   Flame,
   Clock,
@@ -19,7 +23,6 @@ import {
   Zap,
   Quote,
   Eye,
-  Target
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -34,7 +37,7 @@ const QUICK_ACTIONS = [
     href: "/tutorial",
     color: "from-pink-500 via-rose-500 to-fuchsia-500",
     bgColor: "bg-pink-500/10",
-    textColor: "text-pink-400"
+    textColor: "text-pink-400",
   },
   {
     title: "AI Custom Look",
@@ -43,7 +46,7 @@ const QUICK_ACTIONS = [
     href: "/",
     color: "from-fuchsia-500 via-purple-500 to-violet-500",
     bgColor: "bg-fuchsia-500/10",
-    textColor: "text-fuchsia-400"
+    textColor: "text-fuchsia-400",
   },
   {
     title: "Chat with Tessi",
@@ -52,7 +55,7 @@ const QUICK_ACTIONS = [
     href: "/chat",
     color: "from-rose-500 via-pink-500 to-orange-500",
     bgColor: "bg-rose-500/10",
-    textColor: "text-rose-400"
+    textColor: "text-rose-400",
   },
   {
     title: "AR Try-On",
@@ -61,8 +64,8 @@ const QUICK_ACTIONS = [
     href: "/ar",
     color: "from-orange-500 via-amber-500 to-yellow-500",
     bgColor: "bg-orange-500/10",
-    textColor: "text-orange-400"
-  }
+    textColor: "text-orange-400",
+  },
 ];
 
 const NAVIGATION_ITEMS = [
@@ -71,52 +74,52 @@ const NAVIGATION_ITEMS = [
     description: "View and edit your profile",
     icon: <User className="w-5 h-5" />,
     href: "/profile",
-    color: "from-pink-500 via-rose-500 to-fuchsia-500"
+    color: "from-pink-500 via-rose-500 to-fuchsia-500",
   },
   {
     title: "Achievements",
     description: "Track your progress",
     icon: <Award className="w-5 h-5" />,
     href: "/profile?tab=achievements",
-    color: "from-fuchsia-500 via-purple-500 to-violet-500"
+    color: "from-fuchsia-500 via-purple-500 to-violet-500",
   },
   {
     title: "Saved Looks",
     description: "Your favorite styles",
     icon: <Heart className="w-5 h-5" />,
     href: "/saved",
-    color: "from-rose-500 via-pink-500 to-fuchsia-500"
+    color: "from-rose-500 via-pink-500 to-fuchsia-500",
   },
   {
     title: "Tutorial History",
     description: "Completed lessons",
     icon: <Clock className="w-5 h-5" />,
     href: "/history",
-    color: "from-orange-500 via-pink-500 to-rose-500"
+    color: "from-orange-500 via-pink-500 to-rose-500",
   },
   {
     title: "Browse Styles",
     description: "Explore makeup looks",
     icon: <Palette className="w-5 h-5" />,
     href: "/explore",
-    color: "from-violet-500 via-fuchsia-500 to-pink-500"
+    color: "from-violet-500 via-fuchsia-500 to-pink-500",
   },
   {
     title: "Settings",
     description: "App preferences",
     icon: <Settings className="w-5 h-5" />,
     href: "/settings",
-    color: "from-slate-500 via-gray-500 to-zinc-500"
-  }
+    color: "from-slate-500 via-gray-500 to-zinc-500",
+  },
 ];
 
 export default function DashboardPage() {
-  const { 
-    profile, 
-    isAuthenticated, 
-    unlockedAchievements, 
+  const {
+    profile,
+    isAuthenticated,
+    unlockedAchievements,
     nextAchievements,
-    signOut 
+    signOut,
   } = useAuth();
 
   if (!isAuthenticated) {
@@ -155,7 +158,8 @@ export default function DashboardPage() {
               <h1 className="text-2xl font-bold">
                 Welcome back,{" "}
                 <span className="bg-gradient-to-r from-pink-400 to-fuchsia-400 bg-clip-text text-transparent">
-                  {profile?.personalInfo?.displayName?.split(" ")?.[0] || "Beauty"}
+                  {profile?.personalInfo?.displayName?.split(" ")?.[0] ||
+                    "Beauty"}
                 </span>
               </h1>
               <p className="text-white/50 mt-1">Ready to glow up today?</p>
@@ -166,16 +170,16 @@ export default function DashboardPage() {
           </div>
         </motion.div>
 
-        <div className="grid lg:grid-cols-12 gap-8"> 
+        <div className="grid lg:grid-cols-12 gap-8">
           {/* Left Column - Profile Card & Stats */}
           {/* Sidebar */}
-          <div className="lg:col-span-4 space-y-6"> 
-            <UserProfileCard 
+          <div className="lg:col-span-4 space-y-6">
+            <UserProfileCard
               profile={profile}
               unlockedAchievements={unlockedAchievements}
               nextAchievements={nextAchievements}
               className="shadow-transcend"
-            /> 
+            />
 
             {/* Streak Card - Hot Pink Style */}
             <Card className="p-6 bg-gradient-to-br from-pink-500/20 via-rose-500/20 to-fuchsia-500/20 border-pink-500/30 relative overflow-hidden">
@@ -203,12 +207,16 @@ export default function DashboardPage() {
             <div className="grid grid-cols-2 gap-3">
               <Card className="p-4 bg-white/5 border-white/10 text-center hover:bg-white/10 transition-all group">
                 <Star className="w-5 h-5 mx-auto mb-2 text-pink-400 group-hover:scale-110 transition-transform" />
-                <p className="text-2xl font-bold text-white">{unlockedAchievements.length}</p>
+                <p className="text-2xl font-bold text-white">
+                  {unlockedAchievements.length}
+                </p>
                 <p className="text-xs text-white/50">Achievements</p>
               </Card>
               <Card className="p-4 bg-white/5 border-white/10 text-center hover:bg-white/10 transition-all group">
                 <TrendingUp className="w-5 h-5 mx-auto mb-2 text-fuchsia-400 group-hover:scale-110 transition-transform" />
-                <p className="text-2xl font-bold text-white">{profile?.stats?.tutorialsCompleted || 0}</p>
+                <p className="text-2xl font-bold text-white">
+                  {profile?.stats?.tutorialsCompleted || 0}
+                </p>
                 <p className="text-xs text-white/50">Tutorials</p>
               </Card>
             </div>
@@ -217,14 +225,15 @@ export default function DashboardPage() {
             <Card className="p-6 bg-gradient-to-br from-pink-500/10 to-fuchsia-500/10 border-pink-500/20">
               <Quote className="w-6 h-6 text-pink-400/50 mb-2" />
               <p className="text-sm italic text-white/70">
-                &ldquo;Beauty is not in the face; beauty is a light in the heart.&rdquo;
+                &ldquo;Beauty is not in the face; beauty is a light in the
+                heart.&rdquo;
               </p>
               <p className="text-xs text-pink-400/60 mt-2">— Kahlil Gibran</p>
             </Card>
           </div>
 
           {/* Right Column - Quick Actions & Navigation */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-8 space-y-6">
             {/* Quick Actions Grid */}
             <section>
               <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -240,16 +249,22 @@ export default function DashboardPage() {
                     transition={{ delay: i * 0.1 }}
                   >
                     <Link href={action.href}>
-                      <Card className={`p-5 bg-white/5 border-white/10 hover:bg-white/10 transition-all group cursor-pointer`}>
+                      <Card
+                        className={`p-5 bg-white/5 border-white/10 hover:bg-white/10 transition-all group cursor-pointer`}
+                      >
                         <div className="flex items-start gap-4">
-                          <div className={`w-12 h-12 rounded-xl ${action.bgColor} flex items-center justify-center ${action.textColor} group-hover:scale-110 transition-transform`}>
+                          <div
+                            className={`w-12 h-12 rounded-xl ${action.bgColor} flex items-center justify-center ${action.textColor} group-hover:scale-110 transition-transform`}
+                          >
                             {action.icon}
                           </div>
                           <div className="flex-1">
                             <h3 className="font-semibold text-white group-hover:text-white transition-colors">
                               {action.title}
                             </h3>
-                            <p className="text-sm text-white/50 mt-1">{action.description}</p>
+                            <p className="text-sm text-white/50 mt-1">
+                              {action.description}
+                            </p>
                           </div>
                           <ChevronRight className="w-5 h-5 text-white/30 group-hover:text-white/60 transition-colors" />
                         </div>
@@ -277,12 +292,18 @@ export default function DashboardPage() {
                     <Link href={item.href}>
                       <Card className="p-4 bg-white/5 border-white/10 hover:bg-white/10 transition-all group cursor-pointer">
                         <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${item.color} flex items-center justify-center text-white`}>
+                          <div
+                            className={`w-10 h-10 rounded-lg bg-gradient-to-br ${item.color} flex items-center justify-center text-white`}
+                          >
                             {item.icon}
                           </div>
                           <div className="flex-1">
-                            <h3 className="font-medium text-sm">{item.title}</h3>
-                            <p className="text-xs text-white/50">{item.description}</p>
+                            <h3 className="font-medium text-sm">
+                              {item.title}
+                            </h3>
+                            <p className="text-xs text-white/50">
+                              {item.description}
+                            </p>
                           </div>
                         </div>
                       </Card>
@@ -307,7 +328,9 @@ export default function DashboardPage() {
                       </div>
                       <div className="flex-1">
                         <p className="text-sm">Completed Tutorial</p>
-                        <p className="text-xs text-white/50">Natural Everyday Look</p>
+                        <p className="text-xs text-white/50">
+                          Natural Everyday Look
+                        </p>
                       </div>
                       <span className="text-xs text-pink-400/60">2h ago</span>
                     </div>
@@ -318,7 +341,9 @@ export default function DashboardPage() {
                       </div>
                       <div className="flex-1">
                         <p className="text-sm">Saved a Look</p>
-                        <p className="text-xs text-white/50">Soft Glam Evening</p>
+                        <p className="text-xs text-white/50">
+                          Soft Glam Evening
+                        </p>
                       </div>
                       <span className="text-xs text-pink-400/60">5h ago</span>
                     </div>
