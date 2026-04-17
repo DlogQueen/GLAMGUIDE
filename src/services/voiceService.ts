@@ -4,13 +4,17 @@ const ELEVENLABS_API_KEY = process.env.NEXT_PUBLIC_ELEVENLABS_API_KEY || '';
 const ELEVENLABS_API_URL = 'https://api.elevenlabs.io/v1';
 
 // Premium female voice IDs from ElevenLabs
+// Updated: Young, American, no accent voices for Tessi
 export const VOICE_OPTIONS = {
-  // Professional makeup artist style voices
-  BELLA: 'XB0fDUnXU5powFXDhCwa',     // Warm, friendly female
-  RACHEL: '21m00Tcm4TlvDq8ikWAM',   // Professional, clear
-  DOMI: 'AZnzlk1XvdvUeBnXmlld',     // Energetic, young
+  // 🌟 TESSI'S VOICE - Young, American, energetic
+  DOMI: 'AZnzlk1XvdvUeBnXmlld',     // Young, energetic, American (TESSI'S DEFAULT)
+  BELLA: 'XB0fDUnXU5powFXDhCwa',     // Warm, friendly, young American
+  RACHEL: '21m00Tcm4TlvDq8ikWAM',   // Clear, neutral American (slightly older)
   ANTONI: 'ErXwobaYiN019PkySvj',     // Smooth, calm (male - backup)
+  // Alternative young voices
   ELLI: 'MF3mGyEYCl7XYWbV9V6O',      // Soft, gentle
+  GLINDA: 'z9fAnlYsNu4n9ND14FKN',   // Very young, upbeat, American (21yo vibe)
+  ALICE: 'Xb7hH8MSUJpSbSDYk0k2',    // Young, friendly, neutral American
   // Premium voices (if subscribed)
   SARAH: 'EXAVITQu4vr4xnSDxMaL',    // News anchor style
   LAURA: 'FGY2WhTYpPnrIDTdsKH5',    // Conversational, warm
@@ -32,7 +36,7 @@ const DEFAULT_SETTINGS: VoiceSettings = {
 
 export async function generateSpeech(
   text: string,
-  voiceId: string = VOICE_OPTIONS.ELLI,
+  voiceId: string = VOICE_OPTIONS.DOMI,  // Tessi: Young, American, energetic
   settings: VoiceSettings = DEFAULT_SETTINGS
 ): Promise<string | null> {
   if (!ELEVENLABS_API_KEY) {
@@ -83,6 +87,7 @@ export function playAudio(audioUrl: string): Promise<void> {
 }
 
 // Fallback to browser TTS if ElevenLabs fails
+// Uses young, American female voice
 export function speakWithBrowserTTS(
   text: string,
   onEnd?: () => void
@@ -94,22 +99,46 @@ export function speakWithBrowserTTS(
 
   const utterance = new SpeechSynthesisUtterance(text);
   
-  // Get voices and select female one
+  // Get voices and select young American female voice
   const voices = window.speechSynthesis.getVoices();
-  const femaleVoice = voices.find(v => 
-    v.name.includes('Female') || 
-    v.name.includes('Samantha') || 
-    v.name.includes('Victoria') ||
-    v.name.includes('Karen') ||
-    v.name.includes('Google US English')
-  ) || voices.find(v => v.lang === 'en-US') || voices[0];
+  const preferredVoices = [
+    { name: 'Samantha', lang: 'en-US' },      // macOS - Young, friendly
+    { name: 'Victoria', lang: 'en-US' },      // macOS - Young
+    { name: 'Ava', lang: 'en-US' },           // macOS - Premium young
+    { name: 'Zira', lang: 'en-US' },          // Windows - Young
+    { name: 'Google US English', lang: 'en-US' }, // Chrome
+  ];
   
-  if (femaleVoice) {
-    utterance.voice = femaleVoice;
+  // Find best matching voice
+  let selectedVoice = null;
+  for (const preferred of preferredVoices) {
+    selectedVoice = voices.find(v => 
+      v.name.toLowerCase().includes(preferred.name.toLowerCase()) && 
+      v.lang === preferred.lang
+    );
+    if (selectedVoice) break;
   }
   
-  utterance.rate = 0.92;
-  utterance.pitch = 1.25;
+  // Fallback to any en-US female voice
+  if (!selectedVoice) {
+    selectedVoice = voices.find(v => 
+      v.lang === 'en-US' && 
+      (v.name.toLowerCase().includes('female') || !v.name.toLowerCase().includes('male'))
+    );
+  }
+  
+  // Last resort: any en-US
+  if (!selectedVoice) {
+    selectedVoice = voices.find(v => v.lang === 'en-US') || voices[0];
+  }
+  
+  if (selectedVoice) {
+    utterance.voice = selectedVoice;
+  }
+  
+  // Young, energetic American settings
+  utterance.rate = 1.05;    // Slightly faster
+  utterance.pitch = 1.35;   // Higher pitch for younger sound
   utterance.volume = 1.0;
   
   if (onEnd) {

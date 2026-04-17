@@ -14,6 +14,7 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
 import { ProfileService } from '@/services/profileService';
+import { supabase } from '@/lib/supabase';
 import { UserProfile, PortfolioLook, Comment, Achievement } from '@/types/profile';
 import { cn } from '@/lib/utils';
 import { AuthModal } from '@/components/makeup/AuthModal';
@@ -40,7 +41,8 @@ export default function ProfilePage() {
   const [selectedLook, setSelectedLook] = useState<PortfolioLook | null>(null);
   const [newComment, setNewComment] = useState('');
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [selectedTheme, setSelectedTheme] = useState(0);
+  const [selectedTheme, setSelectedTheme] = useState(profile?.settings?.theme || 0);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   
   // Color themes matching the PNG design
   const themes = [
@@ -121,6 +123,47 @@ export default function ProfilePage() {
       alert('Failed to save profile. Please try again.');
     }
     setIsSaving(false);
+  };
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    
+    setUploadingAvatar(true);
+    try {
+      // Upload to Supabase Storage
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}_avatar_${Date.now()}.${fileExt}`;
+      const filePath = `avatars/${fileName}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('profiles')
+        .upload(filePath, file);
+        
+      if (uploadError) throw uploadError;
+      
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('profiles')
+        .getPublicUrl(filePath);
+        
+      // Update profile
+      await ProfileService.updateAvatar(user.id, publicUrl);
+      await loadProfile();
+      
+    } catch (error) {
+      console.error('Avatar upload error:', error);
+      alert('Failed to upload avatar. Please try again.');
+    }
+    setUploadingAvatar(false);
+  };
+
+  const handleThemeChange = async (themeIndex: number) => {
+    setSelectedTheme(themeIndex);
+    if (!user) return;
+    
+    // Save theme preference
+    await ProfileService.updateSettings(user.id, { theme: themeIndex });
   };
 
   const handleCancelEdit = () => {
@@ -288,7 +331,7 @@ export default function ProfilePage() {
           {themes.map((theme, i) => (
             <button
               key={i}
-              onClick={() => setSelectedTheme(i)}
+              onClick={() => handleThemeChange(i)}
               className={`w-8 h-8 rounded-full border-2 transition-all ${
                 selectedTheme === i 
                   ? 'scale-125 border-white shadow-lg shadow-white/20' 
@@ -329,9 +372,15 @@ export default function ProfilePage() {
                     )}
                   </div>
                 </div>
-                <button className="absolute bottom-0 right-0 p-2 bg-gradient-to-br from-pink-500 to-fuchsia-500 rounded-full hover:shadow-lg hover:shadow-pink-500/30 transition-all border-2 border-[#0a0a0f]">
+                <label className="absolute bottom-0 right-0 p-2 bg-gradient-to-br from-pink-500 to-fuchsia-500 rounded-full hover:shadow-lg hover:shadow-pink-500/30 transition-all border-2 border-[#0a0a0f] cursor-pointer">
                   <Camera className="w-4 h-4" />
-                </button>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleAvatarUpload}
+                  />
+                </label>
               </div>
             </div>
 

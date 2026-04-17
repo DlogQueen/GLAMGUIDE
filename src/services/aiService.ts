@@ -1,8 +1,9 @@
 import { AIMakeupAnalysis, MakeupStyle, MakeupStep } from "@/types";
 
 // OpenRouter fallback configuration
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || "";
+const OPENROUTER_API_KEY = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY || "";
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+const OPENROUTER_MODEL = "arcee-ai/trinity-large-preview:free"; // Free tier model
 
 // Fallback AI logic for when no API key is available
 const STYLE_KEYWORDS: Record<
@@ -522,7 +523,7 @@ async function generateWithOpenRouter(
       "X-Title": "Makeup Mastery AI",
     },
     body: JSON.stringify({
-      model: "meta-llama/llama-3.1-70b-instruct:free",
+      model: OPENROUTER_MODEL,
       messages: [
         {
           role: "system",

@@ -33,19 +33,21 @@ class TTSService {
     
     this.voices = this.synthesis.getVoices();
     
-    // Pick the most feminine-sounding English voice available (varies by OS/browser).
+    // Pick young, American female voice (no accent) for Tessi
     const preferred = [
+      // 🇺🇸 American voices (young, no accent)
+      "Samantha",           // macOS - Young, friendly American
+      "Victoria",           // macOS - Young, American
+      "Google US English",  // Chrome - Neutral American
+      "Ava",                // macOS - Premium, young American
+      "Zira",               // Windows - Young American
+      "Microsoft Aria",     // Windows - Young, energetic
+      // Fallbacks (avoid UK/accents)
       "Google UK English Female",
-      "Google US English",
-      "Samantha",
-      "Victoria",
-      "Karen",
-      "Moira",
-      "Tessa",
-      "Ava",
       "Serena",
-      "Zira",
-      "Hazel",
+      "Moira",
+      "Karen",
+      "Tessa",
     ].map((s) => s.toLowerCase());
 
     const avoid = ["daniel", "alex", "fred", "anton", "tom", "jorge", "microsoft david"].map((s) =>
@@ -57,11 +59,21 @@ class TTSService {
       const lang = (v.lang || "").toLowerCase();
       let score = 0;
 
-      if (lang.startsWith("en")) score += 10;
-      if (lang === "en-us") score += 2;
+      // American English = highest priority
+      if (lang === "en-us") score += 20;       // Strong preference for US English
+      if (lang.startsWith("en")) score += 10;  // Any English
+      
+      // Prefer known young female voices
+      const youngAmericans = ["samantha", "victoria", "ava", "zira", "microsoft aria"];
+      if (youngAmericans.some((yv) => name.includes(yv))) score += 15;
+      
       if (name.includes("female")) score += 8;
       if (preferred.some((p) => name.includes(p))) score += 6;
       if (avoid.some((a) => name.includes(a))) score -= 6;
+      
+      // Avoid UK/british accents
+      if (name.includes("uk") || name.includes("british") || name.includes("daniel")) score -= 10;
+      
       if (name.includes("siri")) score += 3;
 
       return score;
@@ -82,9 +94,9 @@ class TTSService {
     // Set voice
     utterance.voice = options.voice || this.preferredVoice;
     
-    // Set options with defaults optimized for Tessi
-    utterance.rate = options.rate ?? 1.0; // Natural pace
-    utterance.pitch = options.pitch ?? 1.2; // More feminine by default
+    // Set options for Tessi: Young, energetic American voice
+    utterance.rate = options.rate ?? 1.05;   // Slightly faster (young/energetic)
+    utterance.pitch = options.pitch ?? 1.35; // Higher pitch (younger sound)
     utterance.volume = options.volume ?? 1.0;
     
     // Add some personality with pauses for punctuation
