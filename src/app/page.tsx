@@ -132,8 +132,6 @@ export default function Home() {
                 src="/images/logo.png" 
                 alt="Glam Guide AI" 
                 className="h-20 w-auto hover:scale-105 transition-transform"
-                fetchPriority="high"
-                loading="eager"
                 onError={(e) => {
                   // Fallback if logo doesn't load
                   const target = e.target as HTMLImageElement;
@@ -413,26 +411,14 @@ export default function Home() {
                 transition={{ duration: 3, repeat: Infinity }}
                 className="absolute -top-4 -right-4 w-20 h-20 rounded-2xl overflow-hidden shadow-xl rotate-12"
               >
-                <img 
-                  src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=200&h=200&fit=crop&auto=format" 
-                  alt="Look" 
-                  className="w-full h-full object-cover"
-                  fetchPriority="high"
-                  loading="eager"
-                />
+                <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=200&h=200&fit=crop" alt="Look" className="w-full h-full object-cover" />
               </motion.div>
               <motion.div 
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 4, repeat: Infinity }}
                 className="absolute -bottom-4 -left-4 w-16 h-16 rounded-2xl overflow-hidden shadow-xl -rotate-12"
               >
-                <img 
-                  src="https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=200&h=200&fit=crop&auto=format" 
-                  alt="Look" 
-                  className="w-full h-full object-cover"
-                  fetchPriority="high"
-                  loading="eager"
-                />
+                <img src="https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=200&h=200&fit=crop" alt="Look" className="w-full h-full object-cover" />
               </motion.div>
             </motion.div>
           </div>

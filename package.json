@@ -2,6 +2,9 @@
   "name": "makeup-mastery-ai",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,6 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.1032.0",
     "@capacitor/android": "^8.3.0",
     "@capacitor/camera": "^8.1.0",
     "@capacitor/cli": "^7.6.1",
